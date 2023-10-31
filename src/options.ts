@@ -28,19 +28,19 @@ export class Options {
     disableReview: boolean,
     disableReleaseNotes: boolean,
     maxFiles = '0',
-    reviewSimpleChanges = false,
-    reviewCommentLGTM = false,
+    reviewSimpleChanges = true,
+    reviewCommentLGTM = true,
     pathFilters: string[] | null = null,
     systemMessage = '',
-    openaiLightModel = 'gpt-3.5-turbo',
-    openaiHeavyModel = 'gpt-3.5-turbo',
+    openaiLightModel = 'llama2',
+    openaiHeavyModel = 'llama2',
     openaiModelTemperature = '0.0',
     openaiRetries = '3',
-    openaiTimeoutMS = '120000',
-    openaiConcurrencyLimit = '6',
-    githubConcurrencyLimit = '6',
+    openaiTimeoutMS = '1200000',
+    openaiConcurrencyLimit = '1',
+    githubConcurrencyLimit = '1',
     apiBaseUrl = 'https://api.openai.com/v1',
-    language = 'en-US'
+    language = 'ja-JP'
   ) {
     this.debug = debug
     this.disableReview = disableReview
