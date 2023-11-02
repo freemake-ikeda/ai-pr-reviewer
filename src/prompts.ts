@@ -1,4 +1,4 @@
-import {type Inputs} from './inputs'
+import { type Inputs } from './inputs'
 
 export class Prompts {
   summarize: string
@@ -22,43 +22,41 @@ $file_diff
 
 ## Instructions
 
-I would like you to succinctly summarize the diff within 100 words.
-If applicable, your summary should include a note about alterations 
-to the signatures of exported functions, global data structures and 
-variables, and any changes that might affect the external interface or 
-behavior of the code.
+差分を100ワード以内で簡潔に要約してください。
+要約には、エクスポートされた関数、グローバルデータ構造および変数のシグネチャの変更、
+コードの外部インターフェイスや動作に影響を与える可能性のある変更に該当する部分に
+注釈を含める必要があります。
 `
-  triageFileDiff = `Below the summary, I would also like you to triage the diff as \`NEEDS_REVIEW\` or 
-\`APPROVED\` based on the following criteria:
+  triageFileDiff = `概要の下で、差分を\`NEEDS_REVIEW\`または\`NEEDS_REVIEW\`としてトリアージしてください。
+その判断は下記の基準に基づきます。
+  
+  - 差分にロジックまたは機能への変更が含まれる場合、たとえそれらが軽微な変更であっても
+    \`NEEDS_REVIEW\`としてトリアージします。これには、制御構造の変更や関数呼び出し、
+    変数の割り当てなど、コードの動作に影響を与える可能性のある変更が含まれます。
+  - diff に、コードロジックに影響を与えない非常に小さな変更のみが含まれている場合。
+    タイプミスを修正したり、フォーマットを変更したり、わかりやすくするために変数の名前を変更したりした場合は、
+    \`APPROVED\`としてトリアージします。
+  
+diffを十分に評価し、変更された行数、システム全体への潜在的な影響、新たなバグやセキュリティ脆弱性の
+混入の可能性などの要素を考慮してください。
+疑わしい場合は、常に慎重を期し、差分を\`NEEDS_REVIEW\`としてトリアージしてください。
 
-- If the diff involves any modifications to the logic or functionality, even if they 
-  seem minor, triage it as \`NEEDS_REVIEW\`. This includes changes to control structures, 
-  function calls, or variable assignments that might impact the behavior of the code.
-- If the diff only contains very minor changes that don't affect the code logic, such as 
-  fixing typos, formatting, or renaming variables for clarity, triage it as \`APPROVED\`.
-
-Please evaluate the diff thoroughly and take into account factors such as the number of 
-lines changed, the potential impact on the overall system, and the likelihood of 
-introducing new bugs or security vulnerabilities. 
-When in doubt, always err on the side of caution and triage the diff as \`NEEDS_REVIEW\`.
-
-You must strictly follow the format below for triaging the diff:
+この作業によるdiffのトリアージの出力形式は、次に示す書式に厳密に従う必要があります。
 [TRIAGE]: <NEEDS_REVIEW or APPROVED>
-
-Important:
-- In your summary do not mention that the file needs a through review or caution about
-  potential issues.
-- Do not provide any reasoning why you triaged the diff as \`NEEDS_REVIEW\` or \`APPROVED\`.
-- Do not mention that these changes affect the logic or functionality of the code in 
-  the summary. You must only use the triage status format above to indicate that.
+  
+重要：
+  - あなたの要約では、ファイルの徹底的なレビューや潜在的な問題への注意が必要であることについては言及しないでください。
+  - 差分を\`NEEDS_REVIEW\`または\`APPROVED\`としてトリアージした理由を説明しないでください。
+  - これらの変更がコードのロジックや機能に影響することは、サマリーには書かないでください。
+    上記のトリアージステータスの書式は、そのことを示すためだけに使用してください。
 `
-  summarizeChangesets = `Provided below are changesets in this pull request. Changesets 
-are in chronlogical order and new changesets are appended to the
-end of the list. The format consists of filename(s) and the summary 
-of changes for those files. There is a separator between each changeset.
-Your task is to deduplicate and group together files with
-related/similar changes into a single changeset. Respond with the updated 
-changesets using the same format as the input. 
+  summarizeChangesets = `このプル リクエストの変更セットを以下に示します。
+変更セットは時系列順に並べられ、新しい変更セットはリストの最後に追加されます。
+形式は、ファイル名とそれらのファイルの変更の概要で構成されます。
+各変更セットの間には区切り文字があります。
+あなたのタスクは、関連する/類似した変更を含むファイルを重複排除し、
+単一の変更セットにグループ化することです。
+入力と同じ形式を使用して、更新された変更セットで応答してください。
 
 $raw_summary
 `
@@ -70,17 +68,16 @@ $raw_summary
 
 `
 
-  summarizeShort = `Your task is to provide a concise summary of the changes. This 
-summary will be used as a prompt while reviewing each file and must be very clear for 
-the AI bot to understand. 
+  summarizeShort = `あなたの仕事は、変更の簡潔な概要を提供することです。
+この概要は各ファイルを確認する際のプロンプトとして使用され、AI ボットが理解できるように明確にする必要があります。
 
 Instructions:
 
-- Focus on summarizing only the changes in the PR and stick to the facts.
-- Do not provide any instructions to the bot on how to perform the review.
-- Do not mention that files need a through review or caution about potential issues.
-- Do not mention that these changes affect the logic or functionality of the code.
-- The summary should not exceed 500 words.
+- PRの変更点の要約のみに重点を置き、あくまで事実にこだわります。
+- レビューの実行方法についてボットに指示を与えないでください。
+- ファイルには徹底的なレビューが必要であることや、潜在的な問題についての注意が必要であることには言及しないでください。
+- これらの変更がコードのロジックや機能に影響を与えることには言及しないでください。
+- 要約は500語を超えないようにします。
 `
 
   reviewFileDiff = `## GitHub PR Title
@@ -101,23 +98,21 @@ $short_summary
 
 ## IMPORTANT Instructions
 
-Input: New hunks annotated with line numbers and old hunks (replaced code). Hunks represent incomplete code fragments.
-Additional Context: PR title, description, summaries and comment chains.
-Task: Review new hunks for substantive issues using provided context and respond with comments if necessary.
-Output: Review comments in markdown with exact line number ranges in new hunks. Start and end line numbers must be within the same hunk. For single-line comments, start=end line number. Must use example response format below.
-Use fenced code blocks using the relevant language identifier where applicable.
-Don't annotate code snippets with line numbers. Format and indent code correctly.
-Do not use \`suggestion\` code blocks.
-For fixes, use \`diff\` code blocks, marking changes with \`+\` or \`-\`. The line number range for comments with fix snippets must exactly match the range to replace in the new hunk.
+Input: 行番号が付いた新規追加されたコードの断片（hunks）と古いコード（置き換えられたコード）。hunksは部分的なコード断片を表します。
+Additional Context: PRのタイトル、説明、要約、およびコメントチェーン。
+Task: 提供されたコンテキストを使用して新規hunksの重要な問題をレビューし、必要に応じてコメントで応じてください。
+Output: 新規hunksの正確な行番号範囲を参照した Markdown形式のレビューコメントを提供します。単一行のコメントの場合は、開始行番号=終了行番号を使用します。コメントは同じhunk内にある必要があります。適切な言語識別子を使用してフェンスコードブロックを使用してください。コードを正しくフォーマットし、インデントを合わせてください。「suggestion」コードブロックの使用は避けてください。提案された変更については、"+"または"-"を使用して変更を示す「diff」コードブロックを使用してください。修正スニペットを含むコメントの行番号範囲は、新しいhunk内で置き換える範囲と正確に一致している必要があります。
 
-- Do NOT provide general feedback, summaries, explanations of changes, or praises 
-  for making good additions. 
-- Focus solely on offering specific, objective insights based on the 
-  given context and refrain from making broad comments about potential impacts on 
-  the system or question intentions behind the changes.
+- 一般的なフィードバック、要約、変更の説明、または良い追加を行ったことに対する賛辞を提供しないでください。
+- 提供されたコンテキストに基づいて特定の、客観的な洞察にのみ焦点を当て、システム全体への潜在的な影響についての広範なコメントや変更の意図に関する質問を避けてください。
 
-If there are no issues found on a line range, you MUST respond with the 
-text \`LGTM!\` for that line range in the review section. 
+特定の行範囲に問題が見つからない場合は、その行範囲に対して\`LGTM!\`というテキストでレビューセクションに応答する必要があります。
+
+パフォーマンス、セキュリティ、デザインパターンの遵守に焦点を当てた変更が必要または有益である理由に関するコメント。
+
+曖昧さや不確実性がある場合は、それらの領域をさらなる人間のレビューのためにフラグを立て、そのようにする理由について簡潔に説明してください。
+
+フィードバックは建設的であるべきです。すべてのコメントと提案には明確な説明を提供し、プロジェクトの全体的な標準と目標に沿ってコードを改善するのに役立つように焦点を当ててください。
 
 ## Example
 
@@ -153,7 +148,7 @@ def subtract(x, y):
 
 ---comment_chains---
 \`\`\`
-Please review this change.
+変更を確認してください。
 \`\`\`
 
 ---end_change_section---
@@ -161,7 +156,7 @@ Please review this change.
 ### Example response
 
 22-22:
-There's a syntax error in the add function.
+構文エラーがあります。
 \`\`\`diff
 -    retrn z
 +    return z
@@ -176,9 +171,8 @@ LGTM!
 $patches
 `
 
-  comment = `A comment was made on a GitHub PR review for a 
-diff hunk on a file - \`$filename\`. I would like you to follow 
-the instructions in that comment. 
+  comment = `ファイル \`$filename\` に、Github PR レビューのコメントがつけられました。
+そのコメントの指示に従ってください。
 
 ## GitHub PR Title
 
@@ -210,15 +204,12 @@ $diff
 
 ## Instructions
 
-Please reply directly to the new comment (instead of suggesting 
-a reply) and your reply will be posted as-is.
+(返信を提案するのではなく) 新しいコメントに直接返信してください。返信はそのまま掲載されます。
 
-If the comment contains instructions/requests for you, please comply. 
-For example, if the comment is asking you to generate documentation 
-comments on the code, in your reply please generate the required code.
+コメント内に指示・要望が含まれる場合は遵守してください。
+たとえば、コメントがコードに関するドキュメント コメントを生成するように求めている場合は、返信で必要なコードを生成してください。
 
-In your reply, please make sure to begin the reply by tagging the user 
-with "@user".
+返信では、ユーザーを\`@user\`でタグ付けして返信を開始してください。
 
 ## Comment format
 
